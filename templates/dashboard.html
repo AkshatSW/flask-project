@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block body %}
+<!-- Page Header-->
+<header class="masthead" style="background-image: url(' {{ url_for ('static', filename='assets/img/home-bg.jpg') }} ')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>Logged in</h1>
+                    <span class="subheading">A Blog Theme by Start Bootstrap</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Main Content-->
+<table class="table" style="margin: 30px;">
+    <thead>
+        <tr>
+            <th scope="col">sno</th>
+            <th scope="col">title</th>
+            <th scope="col">slug</th>
+            <th scope="col">edit</th>
+            <th scope="col">delete</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Jenga for loop -->
+        {% for post in posts %}
+
+        <tr>
+            <th scope="row">{{post.sno}}</th>
+            <td>{{post.title}}</td>
+            <td>{{post.slug}}</td>
+            <td> <a href="/edit/{{post.sno}}"> <button>edit</button> </a> </td>
+            <td><button>delete</button></td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>
+
+{% endblock %}
