@@ -11,6 +11,7 @@
         "about_text": "This is the about content, hey this is akshat. This page is loaded from config.json file",
         "number_of_posts": "5",
         "admin_name": "admin",
-        "admin_password": "admin"
+        "admin_password": "admin",
+        "upload_location": "C:\\Users\\User\\Desktop\\MyProjects\\flask>"
     }
 }

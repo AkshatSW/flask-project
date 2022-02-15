@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 import json
 # from flask_mail import Mail # for sending emails
@@ -78,12 +78,19 @@ def edit(sno):
             box_title=request.form.get('title')
             slug=request.form.get('slug')
             content=request.form.get('content')
-
             if sno=='0':
                 post=Posts(title=box_title, slug=slug, content=content)
                 db.session.add(post)
                 db.session.commit()
-        return render_template('edit.html', params=params)
+            else:
+                post=Posts.query.filter_by(sno=sno).first()
+                post.title=box_title
+                post.slug=slug
+                post.content=content
+                db.session.commit()
+                return redirect('/edit/'+sno)
+        post=Posts.query.filter_by(sno=sno).first()
+        return render_template('edit.html', params=params, post=post)
 
 @app.route("/about")
 def about():
