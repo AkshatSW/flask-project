@@ -22,7 +22,7 @@
 
 <div class="file" style="margin: 10rem;">
     <h2>Upload a File</h2>
-    <form action="/uploader" method="post">
+    <form action="/uploader" method="post" enctype="multipart/form-data">
         <input type="file" name="file1" id="">
         <button type="submit">Submit</button>
     </form>
@@ -51,7 +51,7 @@
             <td>{{post.title}}</td>
             <td>{{post.slug}}</td>
             <td> <a href="/edit/{{post.sno}}"> <button>edit</button> </a> </td>
-            <td><button>delete</button></td>
+            <td><a href="/delete/{{post.sno}}"><button>delete</button></a></td>
         </tr>
 
         {% endfor %}

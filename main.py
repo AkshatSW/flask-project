@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 import json
 # from flask_mail import Mail # for sending emails
-
+import os
+from werkzeug.utils import secure_filename # update, this is a new import libarary for uploading files
 
 with open('config.json', 'r') as c:
     params = json.load(c)["params"]
@@ -11,6 +12,8 @@ with open('config.json', 'r') as c:
 local_server = True
 app = Flask(__name__)
 app.secret_key = 'SECRET KEY'
+app.config['UPLOAD_FOLDER'] = params['upload_location']
+
 '''
 For sending mails
 '''
@@ -91,6 +94,29 @@ def edit(sno):
                 return redirect('/edit/'+sno)
         post=Posts.query.filter_by(sno=sno).first()
         return render_template('edit.html', params=params, post=post)
+
+@app.route("/delete/<string:sno>", methods=['GET', 'POST'])
+def delete(sno):
+     if ('user' in session and session['user'] == params ['admin_name']):
+         post=Posts.query.filter_by(sno=sno).first()
+         db.session.delete(post)
+         db.session.commit()
+         return redirect("/dashboard")
+
+
+
+@app.route("/uploader", methods=['GET', 'POST'])
+def uploader():
+    if ('user' in session and session ['user']==params['admin_name']):
+        if (request.method=='POST'):
+            f=request.files['file1']
+            f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
+            return "upload successfully"
+
+@app.route("/logout")
+def logout():
+    session.pop('user') #killing usersession
+    return redirect ('/dashboard')
 
 @app.route("/about")
 def about():
