@@ -4,6 +4,8 @@ import json
 # from flask_mail import Mail # for sending emails
 import os
 from werkzeug.utils import secure_filename # update, this is a new import libarary for uploading files
+import math 
+
 
 with open('config.json', 'r') as c:
     params = json.load(c)["params"]
@@ -142,4 +144,4 @@ def contact ():
     # '''
     return render_template('contact.html')
 
-app.run(debug=True)
+app.run(debug=True, host="0.0.0.0") #host="0.0.0.0" will make the page accessable by going to http://[ip]:5000/ on any computer in the network
