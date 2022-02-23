@@ -4,7 +4,7 @@ import json
 # from flask_mail import Mail # for sending emails
 import os
 from werkzeug.utils import secure_filename # update, this is a new import libarary for uploading files
-import math 
+import math #for pagination purposes
 
 
 with open('config.json', 'r') as c:
@@ -17,7 +17,7 @@ app.secret_key = 'SECRET KEY'
 app.config['UPLOAD_FOLDER'] = params['upload_location']
 
 '''
-For sending mails
+sending mails
 '''
 # app.config.update(
 #     MAIL_SERVER='smtp.gmail.com',
@@ -49,9 +49,42 @@ class Posts(db.Model):
 
 @app.route("/")
 def home():
-    posts = Posts.query.filter_by().all() [0: 5]
-    return render_template("index.html", params=params, posts=posts)
-
+    posts = Posts.query.filter_by().all() 
+    # [0: 5]
+    last = math.ceil(len(posts)/5) #5 as in number of posts per page    
+    page=request.args.get('page')
+    if (not str(page).isnumeric()):
+        page = 1
+    page=int(page)
+    posts=posts[int(page-1)*5:int(page)*5+5] #params['no_of_posts'] hona chahiye tha but i didn't used it.
+    '''
+    Pagination logic:
+    1. First page
+    prev=#
+    next=page+1
+    2. Middle page
+    prev=page-1
+    next=page+1
+    3. Last page
+    prev=page-1
+    next=#
+    '''
+    #First
+    if (page==1):
+        prev="#"
+        next = "/?page=" + str(int(page) + 1)
+   #last
+    elif(page==last):
+        prev= "/?page=" + str(int(page) - 1)
+        next = "#"
+    #Middle
+    else:
+        prev= "/?page=" + str(int(page) - 1)
+        next = "/?page=" + str(int(page) + 1)
+    
+   
+   
+    return render_template("index.html", params=params, posts=posts, prev=prev, next=next)
 @app.route("/dashboard", methods=['GET', 'POST'])
 def dashboard():
     if ('user' in session and session['user'] == params ['admin_name']):

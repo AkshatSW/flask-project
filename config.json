@@ -12,6 +12,6 @@
         "number_of_posts": "5",
         "admin_name": "admin",
         "admin_password": "admin",
-        "upload_location": "C:\\Users\\User\\Desktop\\MyProjects\\flask\\static"
+        "upload_location": "C:\\Users\\User\\Desktop\\MyProjects\\flask\\static\\assets\\img\\"
     }
 }
